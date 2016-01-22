@@ -1,0 +1,18 @@
+{
+  "name": "freezetbl",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Xi Zhang <xizhangmit@gmail.com>"
+  ],
+  "license": "ISC",
+  "moduleType": [],
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
