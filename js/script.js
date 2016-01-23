@@ -4,7 +4,7 @@ $(function(){
   $('.tableWrap').css({
     'position':'absolute',
     'left': '200px',
-    'width': '20%',
+    'width': '15%',
     'height': '40%',
     'overflow': 'hidden',
     'background-color': 'red'
@@ -28,5 +28,5 @@ $(function(){
   // $('span').css({
   //   'display': 'inline-block'
   // }).width(50);
-  $('.tableWrap').freezeTbl({colFreeze: 0});
+  $('.tableWrap').freezeTbl({colNum: 1});
 })
