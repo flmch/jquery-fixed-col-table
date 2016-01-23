@@ -5,9 +5,8 @@ $(function(){
     'position':'absolute',
     'left': '200px',
     'width': '15%',
-    'height': '20%',
-    'overflow': 'hidden',
-    'background-color': 'red',
+    'height': '20%'
+    // 'background-color': 'red',
   });
-  $('.tableWrap').freezeTbl({colNum: 1});
+  $('.tableWrap').freezeTbl({headNum: 1,colNum: 1});
 })

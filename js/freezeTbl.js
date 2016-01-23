@@ -34,7 +34,7 @@
     },param);
     this.initLayout();
     this.freezeHeader();
-    this.freezeCol();
+    if( this.prop.colNum ){ this.freezeCol(); }
   }
 
   TableFreeze.prototype = {
@@ -87,7 +87,8 @@
       var $topWrap = $('<div>')
             .addClass('topWrap')
             .insertBefore($btmWrap)
-            .css({position: 'absolute'});
+            .css({position: 'absolute', overflow: 'auto'})
+            .on('scroll',function(event){ $btmWrap.scrollLeft($topWrap.scrollLeft()); });
       for(var i=0;i<this.prop.headNum;i++){
         $rows.eq(i).detach().appendTo($topWrap);
         headerH += $rows.eq(i).find('span:first').height();
@@ -97,11 +98,7 @@
         height: $tableWrap.height() - headerH,
         'z-index': 20,
         'background-color': 'white'
-      }).on('scroll', function(event){
-        $topWrap.css({
-          left: -$btmWrap.scrollLeft()
-        });
-      });
+      }).on('scroll', function(event){ $topWrap.scrollLeft($btmWrap.scrollLeft()); });
       $(window).on('resize', function(){
           $btmWrap.css({height: $tableWrap.height() - headerH});
       });
@@ -125,34 +122,7 @@
               'z-index': 20,
               'height': this.prop.headerH
             });
-            // console.log($tableWrap.width());
-            // console.log(freezedWidth);
-            // console.log($headRows);
-      $headRows.each(function(index,row){
-        var $newRow = $('<div>')
-              .addClass('tableRow')
-              .appendTo($topLeftWrap)
-        var $rowSpns = $(row).find('span');
-        $(row).css({width: self.getTableWidth() - freezedWidth});
-        console.log($(row));
-        console.log($tableWrap.width());
-        console.log(freezedWidth);
-        for(var i=0;i<self.prop.colNum;i++){
-           $rowSpns.eq(i).detach().appendTo($newRow);
-        }
-      });
-      $topWrap.css({
-        left: freezedWidth,
-        width: $tableWrap.width() - freezedWidth
-      });
-      $btmWrap.on('scroll', function(){
-        $topWrap.css({
-          left: self.getTableWidth(self.prop.colNum) - $btmWrap.scrollLeft()
-        });
-      }).css({
-        left: freezedWidth,
-        width: $tableWrap.width() - freezedWidth
-      });
+      self.shiftCells($topWrap,$topLeftWrap);
 
       // bottom left section
       var $btmLeftWrap = $('<div>')
@@ -164,17 +134,7 @@
               'overflow': 'scroll',
             })
             .insertBefore($btmWrap)
-      $btmWrap.find('.tableRow').each(function(index,row){
-        var $newRow = $('<div>')
-              .addClass('tableRow')
-              .css({width: freezedWidth})
-              .appendTo($btmLeftWrap);
-        var $spans = $(this).find('span');
-        for(var j=0;j<self.prop.colNum;j++){
-          $spans.eq(j).detach().appendTo($newRow);
-        }
-        $(this).css({width: $(this).width() - freezedWidth });
-      });
+      self.shiftCells($btmWrap,$btmLeftWrap);
       $btmWrap.on('scroll', function(event){
         $btmLeftWrap.scrollTop($btmWrap.scrollTop());
       });
@@ -185,13 +145,27 @@
       // scroll area move as window resize
       $(window).on('resize', function(){
           $btmWrap.css({width: $tableWrap.width() - freezedWidth});
-          $btmLeftWrap.css({
-            height: $tableWrap.height() - self.prop.headerH
-          });
-          $topWrap.css({
-            width: $tableWrap.width() - freezedWidth
-          });
+          $topWrap.css({width: $tableWrap.width() - freezedWidth});
+          $btmLeftWrap.css({height: $tableWrap.height() - self.prop.headerH});
       });
+    },
+    shiftCells: function($wrapFrom, $wrapTo){
+      var self = this;
+      var $tableWrap = self.prop.$tableWrap;
+      var $rows = $wrapFrom.find('.tableRow');
+      var freezedWidth = self.getTableWidth(self.prop.colNum);
+      $rows.each(function(index,row){
+        var $newRow = $('<div>')
+              .addClass('tableRow')
+              .css({width: freezedWidth})
+              .appendTo($wrapTo);
+        var $spans = $(this).find('span');
+        for(var i=0;i<self.prop.colNum;i++){
+          $spans.eq(i).detach().appendTo($newRow);
+        }
+        $(this).css({width: $(this).width() - freezedWidth});
+      });
+      $wrapFrom.css({left: freezedWidth,width: $tableWrap.width() - freezedWidth});
     }
   }
 })(jQuery);
