@@ -11,7 +11,7 @@
   function TableFreeze(param){
     this.prop = $.extend({
       colNum: 0,
-      headNum: 1,
+      headNum: 2,
       headerH: 0,
       headerInfo: [
         {
@@ -115,17 +115,32 @@
 
       // top left section
       var $topWrap = $tableWrap.find('.topWrap');
-      var $headCells = $topWrap.find('> div > span');
+      var $headRows = $topWrap.find('> div');
       var $topLeftWrap = $('<div>')
             .addClass('topLeftWrap')
             .insertBefore($topWrap)
-            .css({position: 'absolute','background-color': 'white','z-index':20});
-      var $newRowHead = $('<div>')
-            .addClass('tableRow')
-            .appendTo($topLeftWrap)
-      for(var i=0;i<this.prop.colNum;i++){
-        $headCells.eq(i).detach().appendTo($newRowHead);
-      }
+            .css({
+              position: 'absolute',
+              'background-color': 'white',
+              'z-index': 20,
+              'height': this.prop.headerH
+            });
+            // console.log($tableWrap.width());
+            // console.log(freezedWidth);
+            // console.log($headRows);
+      $headRows.each(function(index,row){
+        var $newRow = $('<div>')
+              .addClass('tableRow')
+              .appendTo($topLeftWrap)
+        var $rowSpns = $(row).find('span');
+        $(row).css({width: self.getTableWidth() - freezedWidth});
+        console.log($(row));
+        console.log($tableWrap.width());
+        console.log(freezedWidth);
+        for(var i=0;i<self.prop.colNum;i++){
+           $rowSpns.eq(i).detach().appendTo($newRow);
+        }
+      });
       $topWrap.css({
         left: freezedWidth,
         width: $tableWrap.width() - freezedWidth
