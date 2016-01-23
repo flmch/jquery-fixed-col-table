@@ -1,14 +1,14 @@
 (function($){
   $.fn.freezeTbl = function(param){
     param.$tableWrap = param.$tableWrap || $(this);
-    param.$innerWrap = param.$tableWrap.find('.innerWrap');
+    param.$btmWrap = param.$tableWrap.find('.btmWrap');
     return this.each(function(){
-      // ReshapeTable.call($(this),param);
-      new ReshapeTable(param);
+      // TableFreeze.call($(this),param);
+      new TableFreeze(param);
     });
   }
 
-  function ReshapeTable(param){
+  function TableFreeze(param){
     this.prop = $.extend({
       colNum: 0,
       headNum: 1,
@@ -37,7 +37,7 @@
     this.freezeCol();
   }
 
-  ReshapeTable.prototype = {
+  TableFreeze.prototype = {
     getHeaderInfo: function(){
       var $tableWrap = this.prop.$tableWrap;
       this.prop.headerInfo = Array.prototype.slice.call(
@@ -59,8 +59,8 @@
     initLayout: function(){
       var self = this;
       var $tableWrap = self.prop.$tableWrap;
-      var $innerWrap = self.prop.$innerWrap;
-      var $rows = $innerWrap.find('> div');
+      var $btmWrap = self.prop.$btmWrap;
+      var $rows = $btmWrap.find('> div');
       $rows.addClass('tableRow').css({'width':self.getTableWidth()});
       self.prop.headerInfo.forEach(function(info,index){
         $rows.find('span:nth-child(' + (index + 1) + ')')
@@ -71,38 +71,39 @@
               float: 'left'
             });
       });
-      $innerWrap.css({
+      $btmWrap.css({
         'position':'absolute',
         'width': '100%',
         'height': '100%',
         'overflow': 'auto'
       });
+
     },
     freezeHeader: function(){
       var headerH = 0;
       var $tableWrap = this.prop.$tableWrap;
-      var $innerWrap = this.prop.$innerWrap;
-      var $rows = $innerWrap.find('.tableRow');
-      var $freezedHead = $('<div>')
-            .addClass('freezedHead')
-            .insertBefore($innerWrap)
+      var $btmWrap = this.prop.$btmWrap;
+      var $rows = $btmWrap.find('.tableRow');
+      var $topWrap = $('<div>')
+            .addClass('topWrap')
+            .insertBefore($btmWrap)
             .css({position: 'absolute'});
       for(var i=0;i<this.prop.headNum;i++){
-        $rows.eq(i).detach().appendTo($freezedHead);
+        $rows.eq(i).detach().appendTo($topWrap);
         headerH += $rows.eq(i).find('span:first').height();
       }
-      $innerWrap.css({
+      $btmWrap.css({
         top: headerH,
         height: $tableWrap.height() - headerH,
         'z-index': 20,
         'background-color': 'white'
       }).on('scroll', function(event){
-        $freezedHead.css({
-          left: -$innerWrap.scrollLeft()
+        $topWrap.css({
+          left: -$btmWrap.scrollLeft()
         });
       });
       $(window).on('resize', function(){
-          $innerWrap.css({height: $tableWrap.height() - headerH});
+          $btmWrap.css({height: $tableWrap.height() - headerH});
       });
       this.prop.headerH = headerH;
     },
@@ -110,28 +111,28 @@
       var self = this;
       var freezedWidth = this.getTableWidth(this.prop.colNum);
       var $tableWrap = this.prop.$tableWrap;
-      var $innerWrap = this.prop.$innerWrap;
+      var $btmWrap = this.prop.$btmWrap;
 
       // top left section
-      var $freezedHead = $tableWrap.find('.freezedHead');
-      var $headCells = $freezedHead.find('> div > span');
-      var $freezedHeadLeft = $('<div>')
-            .addClass('freezedHeadLeft')
-            .insertBefore($freezedHead)
+      var $topWrap = $tableWrap.find('.topWrap');
+      var $headCells = $topWrap.find('> div > span');
+      var $topLeftWrap = $('<div>')
+            .addClass('topLeftWrap')
+            .insertBefore($topWrap)
             .css({position: 'absolute','background-color': 'white','z-index':20});
       var $newRowHead = $('<div>')
             .addClass('tableRow')
-            .appendTo($freezedHeadLeft)
+            .appendTo($topLeftWrap)
       for(var i=0;i<this.prop.colNum;i++){
         $headCells.eq(i).detach().appendTo($newRowHead);
       }
-      $freezedHead.css({
+      $topWrap.css({
         left: freezedWidth,
         width: $tableWrap.width() - freezedWidth
       });
-      $innerWrap.on('scroll', function(){
-        $freezedHead.css({
-          left: self.getTableWidth(self.prop.colNum) - $innerWrap.scrollLeft()
+      $btmWrap.on('scroll', function(){
+        $topWrap.css({
+          left: self.getTableWidth(self.prop.colNum) - $btmWrap.scrollLeft()
         });
       }).css({
         left: freezedWidth,
@@ -139,40 +140,40 @@
       });
 
       // bottom left section
-      var $freezedBtmLeft = $('<div>')
-            .addClass('freezedBtmLeft')
+      var $btmLeftWrap = $('<div>')
+            .addClass('btmLeftWrap')
             .css({
               position: 'absolute',
               top: self.prop.headerH,
               height: $tableWrap.height() - self.prop.headerH,
               'overflow': 'scroll',
             })
-            .insertBefore($innerWrap)
-      $innerWrap.find('.tableRow').each(function(index,row){
+            .insertBefore($btmWrap)
+      $btmWrap.find('.tableRow').each(function(index,row){
         var $newRow = $('<div>')
               .addClass('tableRow')
               .css({width: freezedWidth})
-              .appendTo($freezedBtmLeft);
+              .appendTo($btmLeftWrap);
         var $spans = $(this).find('span');
         for(var j=0;j<self.prop.colNum;j++){
           $spans.eq(j).detach().appendTo($newRow);
         }
         $(this).css({width: $(this).width() - freezedWidth });
       });
-      $innerWrap.on('scroll', function(event){
-        $freezedBtmLeft.scrollTop($innerWrap.scrollTop());
+      $btmWrap.on('scroll', function(event){
+        $btmLeftWrap.scrollTop($btmWrap.scrollTop());
       });
-      $freezedBtmLeft.on('scroll', function(event){
-        $innerWrap.scrollTop($freezedBtmLeft.scrollTop());
+      $btmLeftWrap.on('scroll', function(event){
+        $btmWrap.scrollTop($btmLeftWrap.scrollTop());
       });
 
       // scroll area move as window resize
       $(window).on('resize', function(){
-          $innerWrap.css({width: $tableWrap.width() - freezedWidth});
-          $freezedBtmLeft.css({
+          $btmWrap.css({width: $tableWrap.width() - freezedWidth});
+          $btmLeftWrap.css({
             height: $tableWrap.height() - self.prop.headerH
           });
-          $freezedHead.css({
+          $topWrap.css({
             width: $tableWrap.width() - freezedWidth
           });
       });
