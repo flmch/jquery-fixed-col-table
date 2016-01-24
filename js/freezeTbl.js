@@ -3,7 +3,6 @@
     param.$tableWrap = param.$tableWrap || $(this);
     param.$btmWrap = param.$tableWrap.find('.btmWrap');
     return this.each(function(){
-      // TableFreeze.call($(this),param);
       new TableFreeze(param);
     });
   }
@@ -87,7 +86,7 @@
       var $topWrap = $('<div>')
             .addClass('topWrap')
             .insertBefore($btmWrap)
-            .css({position: 'absolute', overflow: 'auto'})
+            .css({position: 'absolute', overflow: 'scroll', width: $tableWrap.width()})
             .on('scroll',function(event){ $btmWrap.scrollLeft($topWrap.scrollLeft()); });
       for(var i=0;i<this.prop.headNum;i++){
         $rows.eq(i).detach().appendTo($topWrap);

@@ -4,7 +4,7 @@ $(function(){
   $('.tableWrap').css({
     'position':'absolute',
     'left': '200px',
-    'width': '15%',
+    'width': '20%',
     'height': '20%'
     // 'background-color': 'red',
   });
