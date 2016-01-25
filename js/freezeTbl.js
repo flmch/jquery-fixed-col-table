@@ -6,6 +6,10 @@
 
   function freezeTbl(param){
     this.prop = $.extend((this.prop || {}),{
+      colNum: 0,
+      headNum: 0,
+      headerInfo: [],
+      content: []
     },param);
     console.log(this.prop);
     this.init();
@@ -19,7 +23,7 @@
     },
     getTableWidth: function(colNum){
       return this.prop.headerInfo.reduce(function(preVal,curEle,index){
-        return preVal +  ( (!colNum || index+1 <= colNum) ? curEle.width : 0 );
+        return preVal +  ( (!colNum || index+1 <= colNum) ? (+curEle.width) : 0 );
       },0)
     },
     createBasicStructure: function(){
@@ -37,24 +41,32 @@
       self.prop.$btmWrap = $btmWrap;
       self.prop.tableWidth = self.getTableWidth();
 
-      var $headRow = $('<div>').addClass('tableRow').css({width: self.prop.tableWidth}).appendTo($btmWrap);
+      // header row
+      var $headRow = $('<div>').addClass('tableRow').css({width: self.prop.tableWidth, height: '0px'}).appendTo($btmWrap);
       self.prop.headerInfo.forEach(function(ele){
-        $('<span>')
+        var $curSpan = $('<span>')
           .text(ele.title)
           .addClass('tblHd')
-          .css({float: 'left', display: 'inline-block', width: ele.width, 'box-sizing': 'border-box'})
+          .css({float: 'left', display: 'inline-block', width: ele.width,'box-sizing': 'border-box'})
           .appendTo($headRow);
+        $headRow.css({height: Math.max($headRow.height(),$curSpan.height()) + 'px' });
       });
+      $headRow.find('span').height($headRow.height());
+
+      // content rows
       self.prop.content.forEach(function(row,index){
-        var $newRow = $('<div>').addClass('tableRow record-'+index).css({width: self.prop.tableWidth}).appendTo($btmWrap);
+        var $newRow = $('<div>').addClass('tableRow record-'+index).css({width: self.prop.tableWidth, height: '0px'}).appendTo($btmWrap);
         self.prop.headerInfo.forEach(function(ele){
-          $('<span>')
-            .text(row[ele.title])
+          var $curSpan = $('<span>')
+            .text( row[ele.title] )
             .addClass(ele.title)
             .css({float: 'left', display: 'inline-block', width: ele.width, 'box-sizing': 'border-box'})
             .appendTo($newRow);
+          $newRow.css({height: Math.max($newRow.height(),$curSpan.height()) + 'px' });
         });
+        $newRow.find('span').height($newRow.height());
       });
+      $('body').css('overflow','hidden');
     },
     freezeHeader: function(){
       var headerH = 0;
@@ -66,9 +78,10 @@
             .insertBefore($btmWrap)
             .css({position: 'absolute', overflow: 'scroll', width: $container.width()})
             .on('scroll',function(event){ $btmWrap.scrollLeft($topWrap.scrollLeft()); });
+      // if( this.prop.content.length ){ $topWrap.css({'overflow': 'scroll'}); }
       for(var i=0;i<this.prop.headNum;i++){
         $rows.eq(i).detach().appendTo($topWrap);
-        headerH += $rows.eq(i).find('span:first').height();
+        headerH += $rows.eq(i).height();
       }
       $btmWrap.css({
         top: headerH,
@@ -94,10 +107,10 @@
             .addClass('topLeftWrap')
             .insertBefore($topWrap)
             .css({
-              position: 'absolute',
-              'background-color': 'white',
-              'z-index': 20,
-              'height': this.prop.headerH
+              // position: 'absolute',
+              // 'background-color': 'white',
+              'z-index': 20
+              // 'height': this.prop.headerH
             });
       self.shiftCells($topWrap,$topLeftWrap);
 
@@ -105,12 +118,13 @@
       var $btmLeftWrap = $('<div>')
             .addClass('btmLeftWrap')
             .css({
-              position: 'absolute',
-              top: self.prop.headerH,
-              height: $container.height() - self.prop.headerH,
-              'overflow': 'scroll',
+              // position: 'absolute',
+              // top: self.prop.headerH,
+              // height: $container.height() - self.prop.headerH,
+              // 'overflow': 'scroll'
             })
             .insertBefore($btmWrap)
+      if( self.prop.content.length ){ $btmLeftWrap.css({'overflow': 'scroll'}); }
       self.shiftCells($btmWrap,$btmLeftWrap);
       $btmWrap.on('scroll', function(event){
         $btmLeftWrap.scrollTop($btmWrap.scrollTop());
@@ -131,18 +145,23 @@
       var $container = self.prop.$container;
       var $rows = $wrapFrom.find('.tableRow');
       var freezedWidth = self.getTableWidth(self.prop.colNum);
+
       $rows.each(function(index,row){
+        var $spans = $(this).find('span');
         var $newRow = $('<div>')
               .addClass('tableRow')
-              .css({width: freezedWidth})
+              .css({width: freezedWidth, height: $(row).height() })
               .appendTo($wrapTo);
-        var $spans = $(this).find('span');
         for(var i=0;i<self.prop.colNum;i++){
           $spans.eq(i).detach().appendTo($newRow);
         }
         $(this).css({width: $(this).width() - freezedWidth});
       });
-      $wrapFrom.css({left: freezedWidth,width: $container.width() - freezedWidth});
+      $wrapFrom.css({left: freezedWidth, width: $container.width() - freezedWidth});
+      // console.log($wrapFrom);
+      // console.log($wrapFrom.css('top'));
+      // console.log($wrapFrom.height());
+      $wrapTo.css({position: 'absolute', top: $wrapFrom.css('top'), height: $wrapFrom.height()});
     },
     updateContent: function(newContent){
       // var self = this;
