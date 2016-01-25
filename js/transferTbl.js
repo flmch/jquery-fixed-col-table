@@ -1,60 +1,63 @@
 (function($){
   $.fn.freezeTbl = function(param){
-    param.$container = param.$container || $(this);
-    return new freezeTbl(param);
+    param.$tableWrap = param.$tableWrap || $(this);
+    param.$btmWrap = param.$tableWrap.find('.btmWrap');
+    return this.each(function(){
+      new TableFreeze(param);
+    });
   }
 
-  function freezeTbl(param){
-    this.prop = $.extend((this.prop || {}),{
+  function TableFreeze(param){
+    this.prop = $.extend({
+      colNum: 0,
+      headNum: 2,
+      headerH: 0,
+      headerInfo: [
+        {
+            title: 'Weekday',
+            width: 80
+        },
+        {
+            title: 'Date',
+            width: 80
+        },
+        {
+            title: 'Manager',
+            width: 80
+        },
+        {
+            title: 'Qty',
+            width: 80
+        },
+      ]
     },param);
-    console.log(this.prop);
-    this.createBasicStructure();
+    this.initLayout();
     this.freezeHeader();
     if( this.prop.colNum ){ this.freezeCol(); }
   }
 
-  freezeTbl.prototype = $.extend((freezeTbl.prototype || {}),{
+  TableFreeze.prototype = {
+    getHeaderInfo: function(){
+      var $tableWrap = this.prop.$tableWrap;
+      this.prop.headerInfo = Array.prototype.slice.call(
+        $tableWrap.find('> div div:first span').map(function(index,spn){
+          return {
+            title: $(spn).text(),
+            width : $(spn).width(),
+            height: $(spn).height()
+          }
+        })
+      );
+      return false;
+    },
     getTableWidth: function(colNum){
       return this.prop.headerInfo.reduce(function(preVal,curEle,index){
         return preVal +  ( (!colNum || index+1 <= colNum) ? curEle.width : 0 );
       },0)
     },
-    createBasicStructure: function(){
-      var self = this;
-      var $btmWrap = $('<div>')
-          .addClass('btmWrap')
-          .css({
-            'position':'absolute',
-            'width': '100%',
-            'height': '100%',
-            'overflow': 'auto'
-          })
-          .appendTo(self.prop.$container);
-      self.prop.$btmWrap = $btmWrap;
-      self.prop.tableWidth = self.getTableWidth();
-
-      var $headRow = $('<div>').addClass('tableRow').css({width: self.prop.tableWidth}).appendTo($btmWrap);
-      self.prop.headerInfo.forEach(function(ele){
-        $('<span>')
-          .text(ele.title)
-          .addClass('tblHd')
-          .css({float: 'left', display: 'inline-block', width: ele.width, 'box-sizing': 'border-box'})
-          .appendTo($headRow);
-      });
-      self.prop.content.forEach(function(row){
-        var $newRow = $('<div>').addClass('tableRow').css({width: self.prop.tableWidth}).appendTo($btmWrap);
-        self.prop.headerInfo.forEach(function(ele){
-          $('<span>')
-            .text(row[ele.title])
-            .addClass(ele.title)
-            .css({float: 'left', display: 'inline-block', width: ele.width, 'box-sizing': 'border-box'})
-            .appendTo($newRow);
-        });
-      });
-    },
     initLayout: function(){
       var self = this;
-      var $container = self.prop.$container;
+      var $tableWrap = self.prop.$tableWrap;
       var $btmWrap = self.prop.$btmWrap;
       var $rows = $btmWrap.find('> div');
       $rows.addClass('tableRow').css({'width':self.getTableWidth()});
@@ -77,13 +80,13 @@
     },
     freezeHeader: function(){
       var headerH = 0;
-      var $container = this.prop.$container;
+      var $tableWrap = this.prop.$tableWrap;
       var $btmWrap = this.prop.$btmWrap;
       var $rows = $btmWrap.find('.tableRow');
       var $topWrap = $('<div>')
             .addClass('topWrap')
             .insertBefore($btmWrap)
-            .css({position: 'absolute', overflow: 'scroll', width: $container.width()})
+            .css({position: 'absolute', overflow: 'scroll', width: $tableWrap.width()})
             .on('scroll',function(event){ $btmWrap.scrollLeft($topWrap.scrollLeft()); });
       for(var i=0;i<this.prop.headNum;i++){
         $rows.eq(i).detach().appendTo($topWrap);
@@ -91,23 +94,23 @@
       }
       $btmWrap.css({
         top: headerH,
-        height: $container.height() - headerH,
+        height: $tableWrap.height() - headerH,
         'z-index': 20,
         'background-color': 'white'
       }).on('scroll', function(event){ $topWrap.scrollLeft($btmWrap.scrollLeft()); });
       $(window).on('resize', function(){
-          $btmWrap.css({height: $container.height() - headerH});
+          $btmWrap.css({height: $tableWrap.height() - headerH});
       });
       this.prop.headerH = headerH;
     },
     freezeCol: function(){
       var self = this;
       var freezedWidth = this.getTableWidth(this.prop.colNum);
-      var $container = this.prop.$container;
+      var $tableWrap = this.prop.$tableWrap;
       var $btmWrap = this.prop.$btmWrap;
 
       // top left section
-      var $topWrap = $container.find('.topWrap');
+      var $topWrap = $tableWrap.find('.topWrap');
       var $headRows = $topWrap.find('> div');
       var $topLeftWrap = $('<div>')
             .addClass('topLeftWrap')
@@ -126,7 +129,7 @@
             .css({
               position: 'absolute',
               top: self.prop.headerH,
-              height: $container.height() - self.prop.headerH,
+              height: $tableWrap.height() - self.prop.headerH,
               'overflow': 'scroll',
             })
             .insertBefore($btmWrap)
@@ -140,14 +143,14 @@
 
       // scroll area move as window resize
       $(window).on('resize', function(){
-          $btmWrap.css({width: $container.width() - freezedWidth});
-          $topWrap.css({width: $container.width() - freezedWidth});
-          $btmLeftWrap.css({height: $container.height() - self.prop.headerH});
+          $btmWrap.css({width: $tableWrap.width() - freezedWidth});
+          $topWrap.css({width: $tableWrap.width() - freezedWidth});
+          $btmLeftWrap.css({height: $tableWrap.height() - self.prop.headerH});
       });
     },
     shiftCells: function($wrapFrom, $wrapTo){
       var self = this;
-      var $container = self.prop.$container;
+      var $tableWrap = self.prop.$tableWrap;
       var $rows = $wrapFrom.find('.tableRow');
       var freezedWidth = self.getTableWidth(self.prop.colNum);
       $rows.each(function(index,row){
@@ -161,8 +164,7 @@
         }
         $(this).css({width: $(this).width() - freezedWidth});
       });
-      $wrapFrom.css({left: freezedWidth,width: $container.width() - freezedWidth});
+      $wrapFrom.css({left: freezedWidth,width: $tableWrap.width() - freezedWidth});
     }
-  });
-
+  }
 })(jQuery);
