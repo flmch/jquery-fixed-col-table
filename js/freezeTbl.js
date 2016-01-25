@@ -8,12 +8,15 @@
     this.prop = $.extend((this.prop || {}),{
     },param);
     console.log(this.prop);
-    this.createBasicStructure();
-    this.freezeHeader();
-    if( this.prop.colNum ){ this.freezeCol(); }
+    this.init();
   }
 
   freezeTbl.prototype = $.extend((freezeTbl.prototype || {}),{
+    init: function(){
+      this.createBasicStructure();
+      if( this.prop.headNum ){ this.freezeHeader(); }
+      if( this.prop.colNum ){ this.freezeCol(); }
+    },
     getTableWidth: function(colNum){
       return this.prop.headerInfo.reduce(function(preVal,curEle,index){
         return preVal +  ( (!colNum || index+1 <= colNum) ? curEle.width : 0 );
@@ -21,6 +24,7 @@
     },
     createBasicStructure: function(){
       var self = this;
+      self.prop.$container.empty();
       var $btmWrap = $('<div>')
           .addClass('btmWrap')
           .css({
@@ -41,8 +45,8 @@
           .css({float: 'left', display: 'inline-block', width: ele.width, 'box-sizing': 'border-box'})
           .appendTo($headRow);
       });
-      self.prop.content.forEach(function(row){
-        var $newRow = $('<div>').addClass('tableRow').css({width: self.prop.tableWidth}).appendTo($btmWrap);
+      self.prop.content.forEach(function(row,index){
+        var $newRow = $('<div>').addClass('tableRow record-'+index).css({width: self.prop.tableWidth}).appendTo($btmWrap);
         self.prop.headerInfo.forEach(function(ele){
           $('<span>')
             .text(row[ele.title])
@@ -51,29 +55,6 @@
             .appendTo($newRow);
         });
       });
-    },
-    initLayout: function(){
-      var self = this;
-      var $container = self.prop.$container;
-      var $btmWrap = self.prop.$btmWrap;
-      var $rows = $btmWrap.find('> div');
-      $rows.addClass('tableRow').css({'width':self.getTableWidth()});
-      self.prop.headerInfo.forEach(function(info,index){
-        $rows.find('span:nth-child(' + (index + 1) + ')')
-            .addClass(info.title)
-            .css({
-              width: info.width,
-              display: 'inline-block',
-              float: 'left'
-            });
-      });
-      $btmWrap.css({
-        'position':'absolute',
-        'width': '100%',
-        'height': '100%',
-        'overflow': 'auto'
-      });
-
     },
     freezeHeader: function(){
       var headerH = 0;
@@ -162,6 +143,28 @@
         $(this).css({width: $(this).width() - freezedWidth});
       });
       $wrapFrom.css({left: freezedWidth,width: $container.width() - freezedWidth});
+    },
+    updateContent: function(newContent){
+      // var self = this;
+      // var newContentLen = newContent.length;
+      // var curRecords = this.prop.$container.find('[class*=record]');
+      // var curRecordsLen = Array.prototype.slice.call(curRecords).length;
+      // curRecords.each(function(index,record){
+      //   var newRecord = newContent[index];
+      //   if( newRecord ){
+      //     self.prop.headerInfo.forEach(function(info){
+      //       $(record).find('.'+info.title+'').text(newRecord[info.title]);
+      //     });
+      //   }else{
+      //     $(record).remove();
+      //   }
+      //   for(var i=curRecordsLen;i<newContentLen;i++){
+      //     var $newRow = $('<div>').addClass('tableRow record-'+i).appendTo()
+      //   }
+      // });
+      this.prop.content = newContent;
+      console.log(this.prop);
+      this.init();
     }
   });
 

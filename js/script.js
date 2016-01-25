@@ -9,7 +9,7 @@ $(function(){
     // 'background-color': 'red',
   });
   // $('.tableWrap').freezeTbl({headNum: 1,colNum: 1});
-  $('.tableWrap').freezeTbl({
+  var $myTable = $('.tableWrap').freezeTbl({
     headNum: 1,
     colNum: 1,
     headerInfo: [
@@ -75,4 +75,48 @@ $(function(){
       }
     ]
   });
+  $myTable.updateContent([
+      {
+        'Weekday':  'Mon',
+        'Date': '10/11',
+        'Manager': 'Kelsey',
+        'Qty': 639
+      },
+      {
+        'Weekday':  'Tue',
+        'Date': '10/12',
+        'Manager': 'Lindsey',
+        'Qty': 534
+      },
+      {
+        'Weekday':  'Wed',
+        'Date': '10/13',
+        'Manager': 'Susan',
+        'Qty': 1002
+      },
+      {
+        'Weekday':  'Thu',
+        'Date': '10/14',
+        'Manager': 'Kelsey',
+        'Qty': 639
+      },
+      {
+        'Weekday':  'Fri',
+        'Date': '10/15',
+        'Manager': 'Kelsey',
+        'Qty': 639
+      },
+      {
+        'Weekday':  'Sat',
+        'Date': '10/16',
+        'Manager': 'Kelsey',
+        'Qty': 639
+      },
+      {
+        'Weekday':  'Sun',
+        'Date': '10/17',
+        'Manager': 'Kelsey',
+        'Qty': 639
+      }
+    ]);
 })
