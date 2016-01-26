@@ -3600,11 +3600,46 @@ $(function(){
     }
   ]
 
-  console.log(tableData.length);
+  var singleData = [{
+      "territory_id": "94",
+      "terrcode": "PEXN1E",
+      "terrname": "ROANOKE",
+      "caserecord_id": "3300",
+      "casenumber": "1848956",
+      "referraldate": "2015-11-11",
+      "newreferral": "1",
+      "statuschanged": "",
+      "externalnote": "CIU. 1st notification on 11/11Action Required by HCP: Need Service Boxes on SMN",
+      "referredtocopay": "",
+      "referredtoappeals": "",
+      "pansigndate": "2015-11-02",
+      "flcase": "0",
+      "flbi": "0",
+      "flcopay": "0",
+      "flcoverage": "0",
+      "flnote": "0",
+      "casestatus": "Active",
+      "bistatus": "(blank)",
+      "copaystatus": "",
+      "coveragestatus": "Pending BI",
+      "hcp_id": "3300",
+      "hcpname": "Baker, Troy",
+      "hcpaddress": "1715 Thomson Drive",
+      "hcpcity": "Lynchburg",
+      "hcpstate": "VA",
+      "hcpzip": "24501",
+      "hcpspecialty": "",
+      "facilityname": "",
+      "facilityaddress": "",
+      "facilitycity": "",
+      "facilitystate": "",
+      "facilityzip": "",
+      "isselected": ""
+  }]
+
   console.time('track');
 
   var $myTable = $('.tableWrap').freezeTbl({
-    headNum: 1,
     colNum: 3,
     headerInfo: testHeaderInfo,
     content: tableData
@@ -3699,5 +3734,10 @@ $(function(){
   //   ]);
 
   console.timeEnd('track');
+
+  console.time('update');
+
+  $myTable.displayContent();
+  console.timeEnd('update');
 
 })
