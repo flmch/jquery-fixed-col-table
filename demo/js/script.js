@@ -2,22 +2,6 @@
 
 $(function(){
 
-
-  $('.tableWrap').css({
-    'position':'absolute',
-    'left': '0px',
-    'top': '0px',
-    'width': '100%',
-    'height': '100%',
-  });
-  $('.tableWrap2').css({
-    'position':'absolute',
-    left: '200px',
-    top: '300px',
-    'width': '50%',
-    'height': '200px',
-  });
-
   var headerInfo1 = [
     {
         title: 'Weekday',
@@ -3644,70 +3628,52 @@ $(function(){
       "isselected": ""
   }]
 
+  var $left = $('[name=left]');
+  var $top = $('[name=top]');
+  var $width = $('[name=width]');
+  var $height = $('[name=height]');
+  var $colNum = $('[name=colNum]');
+
+  $('.updateConfig').on('click',function(evnet){
+    $('.tableWrap').css({
+      left: $left.val(),
+      top: $top.val(),
+      width: $width.val(),
+      height: $height.val(),
+    });
+    var $myTable = $('.tableWrap').freezeTbl({
+      colNum: (+$('[name=colNum]').val()),
+      headerInfo: testHeaderInfo,
+    });
+    $myTable.displayContent(tableData);
+  });
+
+  $('.secondTbl').on('click',function(event){
+    // console.log('sdfsd');
+    $('.tableWrap2').toggle();
+  });
+
   // console.time('track');
 
   var $myTable = $('.tableWrap').freezeTbl({
-    colNum: 3,
+    colNum: 0,
     headerInfo: testHeaderInfo,
-    content: tableData
-    // content: [
-    //   {
-    //     'Weekday':  'Mon',
-    //     'Date': '09/11',
-    //     'Manager': 'Kelsey',
-    //     'Qty': 639
-    //   },
-    //   {
-    //     'Weekday':  'Tue',
-    //     'Date': '09/12',
-    //     'Manager': 'Lindsey',
-    //     'Qty': 534
-    //   },
-    //   {
-    //     'Weekday':  'Wed',
-    //     'Date': '09/13',
-    //     'Manager': 'Susan',
-    //     'Qty': 1002
-    //   },
-    //   {
-    //     'Weekday':  'Thu',
-    //     'Date': '09/14',
-    //     'Manager': 'Kelsey',
-    //     'Qty': 639
-    //   },
-    //   {
-    //     'Weekday':  'Fri',
-    //     'Date': '09/15',
-    //     'Manager': 'Kelsey',
-    //     'Qty': 639
-    //   },
-    //   {
-    //     'Weekday':  'Sat',
-    //     'Date': '09/16',
-    //     'Manager': 'Kelsey',
-    //     'Qty': 639
-    //   },
-    //   {
-    //     'Weekday':  'Sun',
-    //     'Date': '09/17',
-    //     'Manager': 'Kelsey',
-    //     'Qty': 639
-    //   }
-    // ]
   });
-
+  $myTable.displayContent(tableData);
+  // $('.tableWrap2').hide();
+  //
   var $myTable2 = $('.tableWrap2').freezeTbl({
     colNum: 0,
     headerInfo: testHeaderInfo,
-    content: tableData
-  })
+  });
+  $myTable2.displayContent(tableData);
 
   // console.timeEnd('track');
 
   // console.time('update');
 
-  $myTable.displayContent(tableData);
-  $myTable2.displayContent(tableData);
+
+  // $myTable2.displayContent(tableData);
   // setTimeout(function(){
   //   $myTable.displayContent(singleData);
   // },4000);

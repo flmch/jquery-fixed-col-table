@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Freeze Table Plugin</title>
+		<link rel="stylesheet" type="text/css" href="./css/style.css"></link>
+	</head>
+	<body>
+    <h3>Freezed Column Table</h3>
+
+    <hr>
+
+    <div class="ctrlField">
+      <div>
+        Left: <input type="text" name="left" value="0px"></input>
+      </div>
+      <div>
+        Top: <input type="text" name="top" value="0px"></input>
+      </div>
+      <div>
+        Width: <input type="text" name="width" value="500px"></input>
+      </div>
+      <div>
+        Height: <input type="text" name="height" value="300px"></input>
+      </div>
+
+      <div>
+        Freezed Column Num: <input type="text" name="colNum" value="0"></input>
+      </div>
+      <button class="updateConfig">Update</button>
+      <button class="secondTbl">show/hide second table</button>
+      <!-- <button class="reloadTable">reload table</button>  -->
+    </div>
+
+    <div class="demoField">
+      <div class="tableWrap">
+  		</div>
+  		<div class="tableWrap2" style="display:none">
+  		</div>
+    </div>
+
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-mockjax/1.6.2/jquery.mockjax.js"></script>
+		<script src="./js/freezeTblFast.js"></script>
+    <script src="./js/script.js"></script>
+	</body>
+</html>

@@ -1,0 +1,39 @@
+.tableWrap {
+  border-top: 1px solid rgb(221,221,221);
+  border-left: 1px solid rgb(221,221,221);
+}
+
+.tableWrap .tblHead span {
+  color: white;
+  text-align: center;
+  line-height: 40px;
+  background: linear-gradient(RGB(49,132,155), RGB(33,88,104));
+}
+
+.tableWrap span {
+  line-height: 35px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgb(221,221,221);
+  border-right: 1px solid rgb(221,221,221);
+}
+
+/*sdfsd*/
+
+.tableWrap2 {
+  border-top: 1px solid rgb(221,221,221);
+  border-left: 1px solid rgb(221,221,221);
+}
+
+.tableWrap2 .tblHead span {
+  color: white;
+  text-align: center;
+  line-height: 40px;
+  background: linear-gradient(RGB(49,132,155), RGB(33,88,104));
+}
+
+.tableWrap2 span {
+  line-height: 35px;
+  box-sizing: border-box;
+  border-bottom: 1px solid rgb(221,221,221);
+  border-right: 1px solid rgb(221,221,221);
+}
