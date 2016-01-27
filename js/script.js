@@ -5,18 +5,18 @@ $(function(){
 
   $('.tableWrap').css({
     'position':'absolute',
-    'left': '0px',
-    'top': '0px',
-    'width': '100%',
-    'height': '100%',
+    'left': '100px',
+    'top': '50px',
+    'width': '60%',
+    'height': '80%',
   });
-  $('.tableWrap2').css({
-    'position':'absolute',
-    left: '200px',
-    top: '300px',
-    'width': '50%',
-    'height': '200px',
-  });
+  // $('.tableWrap2').css({
+  //   'position':'absolute',
+  //   left: '200px',
+  //   top: '300px',
+  //   'width': '50%',
+  //   'height': '200px',
+  // });
 
   var headerInfo1 = [
     {
@@ -3644,70 +3644,171 @@ $(function(){
       "isselected": ""
   }]
 
+  var shortData = [
+    {
+        "territory_id": "94",
+        "terrcode": "PEXN1E",
+        "terrname": "ROANOKE",
+        "caserecord_id": "3300",
+        "casenumber": "1848956",
+        "referraldate": "2015-11-11",
+        "newreferral": "1",
+        "statuschanged": "",
+        "externalnote": "CIU. 1st notification on 11/11Action Required by HCP: Need Service Boxes on SMN",
+        "referredtocopay": "",
+        "referredtoappeals": "",
+        "pansigndate": "2015-11-02",
+        "flcase": "0",
+        "flbi": "0",
+        "flcopay": "0",
+        "flcoverage": "0",
+        "flnote": "0",
+        "casestatus": "Active",
+        "bistatus": "(blank)",
+        "copaystatus": "",
+        "coveragestatus": "Pending BI",
+        "hcp_id": "3300",
+        "hcpname": "Baker, Troy",
+        "hcpaddress": "1715 Thomson Drive",
+        "hcpcity": "Lynchburg",
+        "hcpstate": "VA",
+        "hcpzip": "24501",
+        "hcpspecialty": "",
+        "facilityname": "",
+        "facilityaddress": "",
+        "facilitycity": "",
+        "facilitystate": "",
+        "facilityzip": "",
+        "isselected": ""
+    },
+    {
+        "territory_id": "94",
+        "terrcode": "PEXN1E",
+        "terrname": "ROANOKE",
+        "caserecord_id": "3300",
+        "casenumber": "1848956",
+        "referraldate": "2015-11-11",
+        "newreferral": "1",
+        "statuschanged": "",
+        "externalnote": "CIU. 1st notification on 11/11Action Required by HCP: Need Service Boxes on SMN",
+        "referredtocopay": "",
+        "referredtoappeals": "",
+        "pansigndate": "2015-11-02",
+        "flcase": "0",
+        "flbi": "0",
+        "flcopay": "0",
+        "flcoverage": "0",
+        "flnote": "0",
+        "casestatus": "Active",
+        "bistatus": "(blank)",
+        "copaystatus": "",
+        "coveragestatus": "Pending BI",
+        "hcp_id": "3300",
+        "hcpname": "Baker, Troy",
+        "hcpaddress": "1715 Thomson Drive",
+        "hcpcity": "Lynchburg",
+        "hcpstate": "VA",
+        "hcpzip": "24501",
+        "hcpspecialty": "",
+        "facilityname": "",
+        "facilityaddress": "",
+        "facilitycity": "",
+        "facilitystate": "",
+        "facilityzip": "",
+        "isselected": ""
+    },
+    {
+        "territory_id": "94",
+        "terrcode": "PEXN1E",
+        "terrname": "ROANOKE",
+        "caserecord_id": "3300",
+        "casenumber": "1848956",
+        "referraldate": "2015-11-11",
+        "newreferral": "1",
+        "statuschanged": "",
+        "externalnote": "CIU. 1st notification on 11/11Action Required by HCP: Need Service Boxes on SMN",
+        "referredtocopay": "",
+        "referredtoappeals": "",
+        "pansigndate": "2015-11-02",
+        "flcase": "0",
+        "flbi": "0",
+        "flcopay": "0",
+        "flcoverage": "0",
+        "flnote": "0",
+        "casestatus": "Active",
+        "bistatus": "(blank)",
+        "copaystatus": "",
+        "coveragestatus": "Pending BI",
+        "hcp_id": "3300",
+        "hcpname": "Baker, Troy",
+        "hcpaddress": "1715 Thomson Drive",
+        "hcpcity": "Lynchburg",
+        "hcpstate": "VA",
+        "hcpzip": "24501",
+        "hcpspecialty": "",
+        "facilityname": "",
+        "facilityaddress": "",
+        "facilitycity": "",
+        "facilitystate": "",
+        "facilityzip": "",
+        "isselected": ""
+    },
+    {
+        "territory_id": "94",
+        "terrcode": "PEXN1E",
+        "terrname": "ROANOKE",
+        "caserecord_id": "3300",
+        "casenumber": "1848956",
+        "referraldate": "2015-11-11",
+        "newreferral": "1",
+        "statuschanged": "",
+        "externalnote": "CIU. 1st notification on 11/11Action Required by HCP: Need Service Boxes on SMN",
+        "referredtocopay": "",
+        "referredtoappeals": "",
+        "pansigndate": "2015-11-02",
+        "flcase": "0",
+        "flbi": "0",
+        "flcopay": "0",
+        "flcoverage": "0",
+        "flnote": "0",
+        "casestatus": "Active",
+        "bistatus": "(blank)",
+        "copaystatus": "",
+        "coveragestatus": "Pending BI",
+        "hcp_id": "3300",
+        "hcpname": "Baker, Troy",
+        "hcpaddress": "1715 Thomson Drive",
+        "hcpcity": "Lynchburg",
+        "hcpstate": "VA",
+        "hcpzip": "24501",
+        "hcpspecialty": "",
+        "facilityname": "",
+        "facilityaddress": "",
+        "facilitycity": "",
+        "facilitystate": "",
+        "facilityzip": "",
+        "isselected": ""
+    }
+  ]
   // console.time('track');
 
   var $myTable = $('.tableWrap').freezeTbl({
     colNum: 3,
-    headerInfo: testHeaderInfo,
-    content: tableData
-    // content: [
-    //   {
-    //     'Weekday':  'Mon',
-    //     'Date': '09/11',
-    //     'Manager': 'Kelsey',
-    //     'Qty': 639
-    //   },
-    //   {
-    //     'Weekday':  'Tue',
-    //     'Date': '09/12',
-    //     'Manager': 'Lindsey',
-    //     'Qty': 534
-    //   },
-    //   {
-    //     'Weekday':  'Wed',
-    //     'Date': '09/13',
-    //     'Manager': 'Susan',
-    //     'Qty': 1002
-    //   },
-    //   {
-    //     'Weekday':  'Thu',
-    //     'Date': '09/14',
-    //     'Manager': 'Kelsey',
-    //     'Qty': 639
-    //   },
-    //   {
-    //     'Weekday':  'Fri',
-    //     'Date': '09/15',
-    //     'Manager': 'Kelsey',
-    //     'Qty': 639
-    //   },
-    //   {
-    //     'Weekday':  'Sat',
-    //     'Date': '09/16',
-    //     'Manager': 'Kelsey',
-    //     'Qty': 639
-    //   },
-    //   {
-    //     'Weekday':  'Sun',
-    //     'Date': '09/17',
-    //     'Manager': 'Kelsey',
-    //     'Qty': 639
-    //   }
-    // ]
+    headerInfo: testHeaderInfo
   });
-
-  var $myTable2 = $('.tableWrap2').freezeTbl({
-    colNum: 0,
-    headerInfo: testHeaderInfo,
-    content: tableData
-  })
+  $myTable.displayContent(tableData);
+  // var $myTable2 = $('.tableWrap2').freezeTbl({
+  //   colNum: 0,
+  //   headerInfo: testHeaderInfo,
+  //   content: tableData
+  // })
 
   // console.timeEnd('track');
 
   // console.time('update');
 
-  $myTable.displayContent(tableData);
-  $myTable2.displayContent(tableData);
+
+  // $myTable2.displayContent(tableData);
   // setTimeout(function(){
   //   $myTable.displayContent(singleData);
   // },4000);

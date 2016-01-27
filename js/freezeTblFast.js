@@ -53,7 +53,7 @@
           .css({
             'position':'absolute',
             'top' : '0px',
-            'overflow': 'scroll',
+            'overflow': 'auto',
             'width': '100%'
           })
           .on('scroll',function(event){ prop.$btmWrap.scrollLeft(prop.$topWrap.scrollLeft()); })
@@ -66,6 +66,7 @@
           prop.$btmWrap.css({
             width: prop.$container.width() - prop.freezedWidth,
             height: prop.$container.height() - prop.headerH});
+          self.refreshScrollbar();
         });
       }
       if( prop.colNum ){
@@ -77,7 +78,6 @@
             'position':'absolute',
             'top' : '0px',
             'left' : '0px'
-            // 'width' : prop.freezedWidth
           })
           .insertBefore(prop.$topWrap);
         prop.$btmLeftWrap = $('<div>')
@@ -87,7 +87,6 @@
             'left' : '0px',
             'overflow': 'scroll',
             'height': prop.$container.height() - prop.headerH
-            // 'width' : prop.freezedWidth
           })
           .insertBefore(prop.$btmWrap)
           .on('scroll',function(event){ prop.$btmWrap.scrollTop(prop.$btmLeftWrap.scrollTop()); });;
@@ -114,6 +113,7 @@
         this.createRow( h, prop.$btmLeftWrap, 0, prop.colNum, prop.freezedWidth);
         this.createRow( h, prop.$btmWrap, prop.colNum, prop.headerInfo.length, prop.unfreezedWidth);
       }
+
     },
     createRow: function(level, $target, start, end, rowWidth){
       var self = this;
@@ -150,20 +150,13 @@
       var $rowCells = $rows.find('span');
       var newRowH = this.prop.rowHeight;
       var oldRowH = newRowH;
-      // console.log($rows.length,self.prop.$container);
-
       $rowCells.each(function(index,cell){
-
         var title = self.prop.headerInfo[index].title;
         if( title != undefined ){
-
           $(cell).text( level === undefined ? title : dataObj[title]);
-
           // newRowH = Math.max(newRowH, cell.scrollHeight);
         }
-
       });
-
       // if( newRowH > oldRowH ){
       //     $rows.height(newRowH);
       //     $rowCells.height(newRowH);
@@ -186,15 +179,25 @@
       var self = this;
       var prop = self.prop;
       content = content || [];
-
-
       content.forEach(function(data, index){
         self.displayRow(index, data);
       });
-
-
       for(var i = content.length; i < prop.pageLimit ; i++ ){
         prop.$container.find('.record-'+i).hide();
+      }
+      self.refreshScrollbar();
+    },
+    refreshScrollbar: function(){
+      var $btmWrap = this.prop.$btmWrap;
+      var $topWrap = this.prop.$topWrap;
+      var btmWrapScrollW = $btmWrap[0].scrollWidth;
+      var btmWrapScrollH = $btmWrap[0].scrollHeight;
+      var btmWrapInnerH = $btmWrap.innerHeight();
+      var $tableRows = $topWrap.find('.tableRow');
+      if( btmWrapInnerH < (btmWrapScrollH + 15) ){
+        $tableRows.width( btmWrapScrollW + 15 );
+      }else{
+        $tableRows.width(btmWrapScrollW);
       }
     }
   });
