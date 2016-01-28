@@ -153,6 +153,7 @@
       $rowCells.each(function(index,cell){
         var title = self.prop.headerInfo[index].title;
         if( title != undefined ){
+          $(cell).text("");
           $(cell).text( level === undefined ? title : dataObj[title]);
           // newRowH = Math.max(newRowH, cell.scrollHeight);
         }
