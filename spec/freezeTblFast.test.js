@@ -16,9 +16,15 @@ describe('freezeTbl',function(){
       colNum: 3,
       headerInfo: testHeaderInfo
     });
+    this.prop = this.$myTable.prop
+    this.$container = this.$myTable.prop.$container;
+    this.$btmWrap = this.$myTable.prop.$btmWrap;
+    this.$topWrap = this.$myTable.prop.$topWrap;
+    this.$btmLeftWrap = this.$myTable.prop.$btmLeftWrap;
+    this.$topLeftWrap = this.$myTable.prop.$topLeftWrap;
   });
 
-  it('should define $myTable', function(){
+  it('$myTable should be defined', function(){
     expect(this.$myTable).toBeDefined();
   });
 
@@ -27,16 +33,26 @@ describe('freezeTbl',function(){
         it('should have amount of row equals to number of  data records', function(){
           this.$myTable.displayContent(data);
           var $table = this.$myTable;
-          var $tableRows = $table.prop.$container.find('.btmWrap .tableRow:visible');
+          var $tableRows = this.$btmWrap.find('.tableRow:visible');
           var numOfRecords = data.length;
           expect($tableRows.length).toBe(numOfRecords);
         });
 
         it('should has 1 fixed row of header and n fixed column', function(){
-          var $table = this.$myTable;
-          var $topLeftWrap = $table.prop.$topLeftWrap;
-          var $btmLeftWrap = $table.prop.$btmLeftWrap;
-          expect(this.$myTable.prop.colNum).toBe(3);
+          var $topLeftWrap = this.$topLeftWrap;
+          var $btmLeftWrap = this.$btmLeftWrap;
+          var fixedColNum = $btmLeftWrap == undefined ? 0 : $topLeftWrap.find('.tableRow:first span').length;
+
+          expect($topLeftWrap.find('.tableRow').length).toBe(1);
+          expect(fixedColNum).toBe(this.prop.colNum);
+        });
+
+        it('btmLeft and btm should have same number of row', function(){
+          if( this.$btmLeftWrap !== undefined ){
+            var leftRows = this.$btmLeftWrap.find('.tableRow:visible');
+            var rightRows = this.$btmWrap.find('.tableRow:visible');
+            expect(leftRows.length).toEqual(rightRows.length);
+          }
         });
       });
   });
